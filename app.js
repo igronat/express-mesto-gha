@@ -27,45 +27,6 @@ app.use('/', require('./routes/users'));
 
 
 
-// const cardSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//     minlength: 2,
-//     maxlength: 30,
-//   },
-//   link: {
-//     type: String,
-//     required: true,
-//   },
-//   owner: {
-//     // type: ObjectId,
-//     required: true,
-//   },
-//   likes: {
-//     // type: ObjectId,
-//     default: '',
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: Date.now,
-//   }
-// });
-
-
-// module.exports = mongoose.model('card', cardSchema);
-
-// router.post('/users', (req, res) => {
-//   const { name, about, avatar } = req.body;
-
-//   User.create({ name, about, avatar })
-//     // вернём записанные в базу данные
-//     .then(user => res.send({ data: user }))
-//     // данные не записались, вернём ошибку
-//     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
-// });
-
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
