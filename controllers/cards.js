@@ -1,11 +1,27 @@
 const Card = require('../models/cards');
 
-module.exports.createUser = (req, res) => {
-  // const { name, about, avatar } = req.body;
+module.exports.getCards = (req, res) => {
+    Card.find({})
+      .then(card => res.send({ data: card }))
+      .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 
-  // User.create({ name, about, avatar })
-  //   // вернём записанные в базу данные
-  //   .then(user => res.send({ data: user }))
-  //   // данные не записались, вернём ошибку
-  //   .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
+
+module.exports.createCard = (req, res) => {
+  const { name, link} = req.body;
+  Card.create({
+    name: name,
+    link: link,
+    owner: req.user._id,
+   })
+    .then(card => res.send({ data: card }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+
+};
+
+module.exports.deleteCard = (req, res) => {
+  Card.findByIdAndRemove(req.params.id)
+    .then(card => res.send({ data: card }))
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+
 };

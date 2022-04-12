@@ -8,15 +8,13 @@ const bodyParser = require('body-parser');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  req.user = {
+    _id: '6255667299d9e2828941375f' // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
 
-
-// app.get('/', (req, res) => {
-//   res.send('Hello')
-// })
-
-// app.post('/',(req, res) => {
-//   res.send(req.body)
-// })
+  next();
+});
 
 // подключаемся к серверу mongo
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -24,8 +22,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use('/', require('./routes/users'));
-
-
+app.use('/', require('./routes/cards'));
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
