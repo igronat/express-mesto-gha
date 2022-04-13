@@ -3,7 +3,7 @@ const Card = require('../models/cards');
 module.exports.getCards = (req, res) => {
     Card.find({})
       .then(card => res.send({ data: card }))
-      .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+      .catch(() => res.status(404).send({ message: 'Карточка не найдена' }));
 
 };
 
@@ -15,7 +15,7 @@ module.exports.createCard = (req, res) => {
     owner: req.user._id,
    })
     .then(card => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(404).send({ message: 'Переданы некорректные данные' }))
 
 };
 

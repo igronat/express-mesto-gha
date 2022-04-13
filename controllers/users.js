@@ -13,13 +13,13 @@ module.exports.createUser = (req, res) => {
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then(user => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(404).send({ message: 'Пользователи не найдены' }));
 };
 
 module.exports.getUserId = (req, res) => {
   User.findById(req.params.id)
     .then(user => res.send({data: user}))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(404).send({ message: 'Пользователь не найден' }));
 };
 
 module.exports.updateUser = (req, res) => {
@@ -30,7 +30,7 @@ module.exports.updateUser = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменением
     })
     .then(user => res.send({data: user}))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные' }));
 };
 
 module.exports.updateAvatar = (req, res) => {
@@ -41,5 +41,5 @@ module.exports.updateAvatar = (req, res) => {
       runValidators: true, // данные будут валидированы перед изменением
     })
     .then(user => res.send({data: user}))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные' }));
 };

@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
-// const router = require('express').Router();
 const bodyParser = require('body-parser');
 
 app.use(express.json());
