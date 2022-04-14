@@ -28,14 +28,20 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
+  console.log(User.findById(req.params.id))
   User.findById(req.params.id)
     .then(user => res.send({data: user}))
     .catch(() => {
-      if (req.params.id) {
+      if (!req.params.id) {
         res.status(404).send({ message: 'Пользователь не найден' })
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' })});
+      if (req.body) {
+        res.status(400).send({ message: 'Переданы некорректные данные' })
+        return;
+      }
+      res.status(500).send({ message: 'Произошла ошибка' })
+    });
 };
 
 module.exports.updateUser = (req, res) => {
