@@ -36,6 +36,9 @@ module.exports.deleteCard = (req, res) => {
       if (err.name === "CastError") {
         res.status(404).send({ message: "Пользователь не найден" });
         return;
+      } else if (err.name === "ValidationError") {
+        res.status(400).send({ message: "Переданы некорректные данные" });
+        return;
       }
       res.status(500).send({ message: "Произошла ошибка" });
     });
@@ -47,7 +50,9 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true }
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      console.log(card)
+      res.send({ data: card })})
     .catch((err) => {
       if (err.name === "CastError") {
         res.status(404).send({ message: "Пользователь не найден" });
