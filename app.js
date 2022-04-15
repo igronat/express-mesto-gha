@@ -23,6 +23,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
+// app.use((error, req, res, next) => {
+//   res.status(400)
+// })
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
