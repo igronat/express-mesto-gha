@@ -4,7 +4,7 @@ const {createUser, getUsers, getUserId, updateUser, updateAvatar} = require('../
 
 router.post('/users', createUser);
 router.get('/users', getUsers);
-router.get('/users/:id', getUserId);
+router.get('/users/:userId', getUserId);
 router.patch('/users/me', updateUser);
 router.patch('/users/me/avatar', updateAvatar);
 

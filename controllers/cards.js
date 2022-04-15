@@ -33,6 +33,7 @@ module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => res.send({ data: card }))
     .catch((err) => {
+      console.log(err.name)
       if (err.name === "CastError") {
         res.status(404).send({ message: "Пользователь не найден" });
         return;
