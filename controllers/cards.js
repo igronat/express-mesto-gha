@@ -31,14 +31,14 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card == null) {
+        res.status(404).send({ message: "Карточка с таким id не найдена" });
+      }
+      res.send({ data: card })})
     .catch((err) => {
-      console.log(err.name)
       if (err.name === "CastError") {
-        res.status(404).send({ message: "Пользователь не найден" });
-        return;
-      } else if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы некорректные данные" });
+        res.status(400).send({ message: "Введен некорректный id карточки" });
         return;
       }
       res.status(500).send({ message: "Произошла ошибка" });
@@ -52,14 +52,13 @@ module.exports.likeCard = (req, res) => {
     { new: true }
   )
     .then((card) => {
-      console.log(card)
+      if (card == null) {
+        res.status(404).send({ message: "Карточка с таким id не найдена" });
+      }
       res.send({ data: card })})
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(404).send({ message: "Пользователь не найден" });
-        return;
-      } else if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы некорректные данные" });
+        res.status(400).send({ message: "Введен некорректный id карточки" });
         return;
       }
       res.status(500).send({ message: "Произошла ошибка" });
@@ -72,13 +71,14 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true }
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (card == null) {
+        res.status(404).send({ message: "Карточка с таким id не найдена" });
+      }
+      res.send({ data: card })})
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(404).send({ message: "Пользователь не найден" });
-        return;
-      } else if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы некорректные данные" });
+        res.status(400).send({ message: "Введен некорректный id карточки" });
         return;
       }
       res.status(500).send({ message: "Произошла ошибка" });
