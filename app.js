@@ -4,6 +4,7 @@ const app = express();
 const { PORT = 3000 } = process.env;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const NotFoundError = require('./errors/notFoundError');
 
 const {
   createUser,
@@ -39,8 +40,20 @@ app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.use((req, res) => {
-  res.status(404).send({ message: 'Данный ресурс не найден' });
+app.use((req, res, next) => next(new NotFoundError('Данный ресурс не найден')));
+
+app.use((err, req, res) => {
+  // если у ошибки нет статуса, выставляем 500
+  const { statusCode = 500, message } = err;
+
+  res
+    .status(statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
 });
 
 app.listen(PORT, () => {
