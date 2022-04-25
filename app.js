@@ -55,11 +55,13 @@ app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.use((req, res, next) => next(new NotFoundError('Данный ресурс не найден')));
+app.use('/', (req, res, next) => {
+  next(new NotFoundError('Данный ресурс не найден'));
+});
 
 app.use(errors());
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
 

@@ -27,8 +27,10 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     // данные не записались, вернём ошибку
     .catch((err) => {
+      console.log(err.code);
       if (err.code === 11000) {
-        next(new ConflictError('Такой пользователь уже существует'));
+        next(new UnauthorizedError('Такой пользователь уже существует'));
+        // res.status(409).send({ message: 'Такой пользователь уже существует' });
       }
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные'));
