@@ -1,4 +1,6 @@
 const express = require('express');
+const { errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -32,8 +34,21 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().pattern(/^((http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/),
+  }),
+}), createUser);
 
 app.use(auth);
 
@@ -41,6 +56,8 @@ app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
 app.use((req, res, next) => next(new NotFoundError('Данный ресурс не найден')));
+
+app.use(errors());
 
 app.use((err, req, res) => {
   // если у ошибки нет статуса, выставляем 500
