@@ -24,13 +24,18 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (card == null) {
         res.status(404).send({ message: 'Карточка с таким id не найдена' });
         return;
       }
-      res.send({ data: card });
+      if (!(card.owner.toString() === req.user._id)) {
+        res.status(404).send({ message: 'У вас нет прав на удаление этой карточки' });
+        return;
+      }
+      Card.findByIdAndRemove(req.params.cardId)
+        .then(() => res.send({ message: 'Карточка удалена' }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
