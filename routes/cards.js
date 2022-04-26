@@ -1,5 +1,9 @@
+const JoiObjectId = require('joi-objectid');
+
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+
+Joi.objectId = JoiObjectId(Joi);
 
 const {
   createCard,
@@ -16,8 +20,20 @@ router.post('/cards', celebrate({
   }),
 }), createCard);
 router.get('/cards', getCards);
-router.delete('/cards/:cardId', deleteCard);
-router.put('/cards/:cardId/likes', likeCard);
-router.delete('/cards/:cardId/likes', dislikeCard);
+router.delete('/cards/:cardId', celebrate({
+  params: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), deleteCard);
+router.put('/cards/:cardId/likes', celebrate({
+  params: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), likeCard);
+router.delete('/cards/:cardId/likes', celebrate({
+  params: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), dislikeCard);
 
 module.exports = router;

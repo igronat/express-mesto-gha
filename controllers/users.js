@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 const ValidationError = require('../errors/validationError');
-// const ConflictError = require('../errors/conflictError');
+const ConflictError = require('../errors/conflictError');
 const UnauthorizedError = require('../errors/unauthorizedError');
 const NotFoundError = require('../errors/notFoundError');
 
@@ -24,10 +24,15 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     // вернём записанные в базу данные
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      email: user.email,
+      _id: user._id,
+    }))
     // данные не записались, вернём ошибку
     .catch((err) => {
-      console.log(err.code);
       if (err.code === 11000) {
         next(new UnauthorizedError('Такой пользователь уже существует'));
         // res.status(409).send({ message: 'Такой пользователь уже существует' });
@@ -56,7 +61,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch(() => {
-      next(new UnauthorizedError('В доступе отказано'));
+      next(new ConflictError('В доступе отказано'));
     });
 };
 

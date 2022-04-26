@@ -1,5 +1,9 @@
+const JoiObjectId = require('joi-objectid');
+
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+
+Joi.objectId = JoiObjectId(Joi);
 
 const {
   getUsers,
@@ -11,7 +15,11 @@ const {
 
 router.get('/users', getUsers);
 router.get('/users/me', getUser);
-router.get('/users/:userId', getUserId);
+router.get('/users/:userId', celebrate({
+  params: Joi.object().keys({
+    id: Joi.objectId(),
+  }),
+}), getUserId);
 router.patch('/users/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
