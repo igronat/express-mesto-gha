@@ -34,8 +34,7 @@ module.exports.createUser = (req, res, next) => {
     // данные не записались, вернём ошибку
     .catch((err) => {
       if (err.code === 11000) {
-        next(new UnauthorizedError('Такой пользователь уже существует'));
-        // res.status(409).send({ message: 'Такой пользователь уже существует' });
+        next(new ConflictError('Такой пользователь уже существует'));
       }
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные'));
@@ -61,7 +60,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch(() => {
-      next(new ConflictError('В доступе отказано'));
+      next(new UnauthorizedError('В доступе отказано'));
     });
 };
 
@@ -105,9 +104,6 @@ module.exports.updateUser = (req, res, next) => {
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ValidationError('Пользователь с таким id не найден'));
-      }
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные'));
       }
@@ -127,9 +123,6 @@ module.exports.updateAvatar = (req, res, next) => {
   )
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new ValidationError('Пользователь с таким id не найден'));
-      }
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные'));
       }

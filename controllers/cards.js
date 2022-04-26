@@ -34,7 +34,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (!(card.owner.toString() === req.user._id)) {
         throw new ForbiddenError('У вас нет прав на удаление этой карточки');
       }
-      Card.findByIdAndRemove(req.params.cardId)
+      return Card.findByIdAndRemove(req.params.cardId)
         .then(() => res.send({ message: 'Карточка удалена' }));
     })
     .catch((err) => {
