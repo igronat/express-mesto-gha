@@ -25,17 +25,14 @@ const allowedCors = [
   'https://praktikum.tk',
   'http://praktikum.tk',
   'localhost:3000',
-  'www.localhost:3000',
   'https://localhost:3000',
   'http://localhost:3000',
-  'www://domainname.igronat.nomoredomains.xyz',
   'https://domainname.igronat.nomoredomains.xyz',
   'http://domainname.igronat.nomoredomains.xyz',
   'https://84.252.136.184',
   'http://84.252.136.184',
   'https://api.domainname.igronat.nomoredomains.xyz',
   'http://api.domainname.igronat.nomoredomains.xyz',
-  'www://api.domainname.igronat.nomoredomains.xyz',
 ];
 
 app.use((req, res, next) => {
